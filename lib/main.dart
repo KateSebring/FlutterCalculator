@@ -28,9 +28,21 @@ class MyApp extends StatelessWidget {
           ),
           backgroundColor: Color(0xff0288D1),
         ),
-        body: Row(
+        body: Column(
           children: [
-            Column(children: [
+            SizedBox(
+              height: 50,
+              width: double.infinity,
+              child: Center(
+                child: Text('This is my display field'),
+              )
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(children: [
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
@@ -180,6 +192,9 @@ class MyApp extends StatelessWidget {
                 ),
               ),
             ],),
+                ],
+              ),
+            ),
           ],
         ),
       ),
