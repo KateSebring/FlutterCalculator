@@ -12,6 +12,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Calculator',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.lightBlue
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Calculator App',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          backgroundColor: Color(0xff0288D1),
+        ),
+      )
     );
   }
 }
