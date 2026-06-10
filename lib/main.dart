@@ -25,8 +25,12 @@ class MyApp extends StatelessWidget {
             ),
           ),
           backgroundColor: Color(0xff0288D1),
+          
         ),
-      )
+        body: Center(
+          child: Text('This is my calculator app',),
+        ),
+      ),
     );
   }
 }
