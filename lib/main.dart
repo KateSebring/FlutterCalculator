@@ -2,13 +2,26 @@ import 'package:flutter/material.dart';
 import './widgets.dart';
 import './math.dart';
 
+String displayField = "";
+
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  void updateDisplayField(String value) {
+    setState(() {
+      displayField += value;
+    });
+  }
+  
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -34,7 +47,7 @@ class MyApp extends StatelessWidget {
               height: 50,
               width: double.infinity,
               child: Center(
-                child: Text('This is my display field'),
+                child: Text(displayField),
               )
             ),
             Expanded(
@@ -47,28 +60,36 @@ class MyApp extends StatelessWidget {
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '7', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '4', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '1', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '0', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
             ],),
@@ -77,28 +98,36 @@ class MyApp extends StatelessWidget {
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '8', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '5', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '2', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: 'C', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
             ],),
@@ -107,28 +136,36 @@ class MyApp extends StatelessWidget {
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '9', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '6', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '3', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '=', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
             ],),
@@ -137,28 +174,36 @@ class MyApp extends StatelessWidget {
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '+', 
-                  onPressed: () => {}
+                  onPressed:(value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '-', 
-                  onPressed: () => {}
+                  onPressed:(value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '*', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '/', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
             ],),
@@ -167,28 +212,36 @@ class MyApp extends StatelessWidget {
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '^', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '1/x', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: '√', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(5),
                 child: CalcButton(
                   buttonText: 'n!', 
-                  onPressed: () => {}
+                  onPressed: (value) {
+                    updateDisplayField(value);
+                  },
                 ),
               ),
             ],),
