@@ -21,7 +21,20 @@ class _MyAppState extends State<MyApp> {
       displayField += value;
     });
   }
+
+  void clearDisplayField() {
+    setState(() {
+      displayField = "";
+    });
+  }
   
+  void backspaceDisplayField() {
+    setState(() {
+      if(displayField.isNotEmpty) {
+        displayField = displayField.substring(0, displayField.length - 1);
+      }
+    });
+  }
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -44,11 +57,29 @@ class _MyAppState extends State<MyApp> {
         body: Column(
           children: [
             SizedBox(
-              height: 50,
-              width: double.infinity,
-              child: Center(
-                child: Text(displayField),
-              )
+              width: 500,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 50,
+                      child: Center(
+                        child: Text(displayField),
+                      )
+                    ),
+                  ),
+                  SizedBox(
+                    child: Center(
+                      child: CalcButton(
+                      buttonText: '←', 
+                      onPressed: (value) {
+                        backspaceDisplayField();
+                      },
+                    ),
+                    )
+                  ),
+                ],
+              ),
             ),
             Expanded(
               child: Row(
@@ -56,195 +87,195 @@ class _MyAppState extends State<MyApp> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Column(children: [
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '7', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '4', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '1', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '0', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-            ],),
-            Column(children: [
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '8', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '5', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '2', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: 'C', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-            ],),
-            Column(children: [
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '9', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '6', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '3', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '=', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-            ],),
-            Column(children: [
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '+', 
-                  onPressed:(value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '-', 
-                  onPressed:(value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '*', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '/', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-            ],),
-            Column(children: [
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '^', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '1/x', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: '√', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: CalcButton(
-                  buttonText: 'n!', 
-                  onPressed: (value) {
-                    updateDisplayField(value);
-                  },
-                ),
-              ),
-            ],),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '7', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '4', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '1', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '0', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                  ],),
+                  Column(children: [
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '8', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '5', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '2', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: 'C', 
+                        onPressed: (_) {
+                          clearDisplayField();
+                        }
+                      ),
+                    ),
+                  ],),
+                  Column(children: [
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '9', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '6', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '3', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '=', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                  ],),
+                  Column(children: [
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '+', 
+                        onPressed:(value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '-', 
+                        onPressed:(value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '*', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '/', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                  ],),
+                  Column(children: [
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '^', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '1/x', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: '√', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CalcButton(
+                        buttonText: 'n!', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
+                        },
+                      ),
+                    ),
+                  ],),
                 ],
               ),
             ),
