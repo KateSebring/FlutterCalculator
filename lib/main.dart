@@ -19,9 +19,7 @@ class _MyAppState extends State<MyApp> {
   void updateDisplayField(String value) {
     // allow longer fields eventually
     setState(() {
-      if(displayField.length < 3) {
-        displayField += value;
-      }
+      displayField += value;
     });
   }
 
@@ -41,10 +39,58 @@ class _MyAppState extends State<MyApp> {
 
   void calculateTotal(String input) {
     Math calculations = Math();
-    String symbol = input[1];
-    // check if middle symbol is valid
-    // check if first and last symbols are valid
-    // parse out the symbol
+    String val1 = "";
+    String val2 = "";
+    String symbol = "";
+    int location = 0;
+
+    for(int i = 0; i < input.length; i++) {
+      if(num.tryParse(input[i]) != null) {
+          val1 += input[i];
+          location++; 
+      } else {
+        break;
+      }
+    }
+
+    // we hit a non-number
+    // so we need to fetch the symbol
+    if(location < input.length) {
+      symbol = input[location];
+      location++;
+    } else {
+      print('Symbol: not found.');
+      return;
+    }
+
+    if(symbol != '+' && symbol != '-' && symbol != '*' && symbol != '/' ) {
+      setState(() {
+        displayField = 'ERROR: non-valid symbol entered';
+      });      
+    } else {
+      if(location < input.length) {
+        for(int i = location; i < input.length; i++) {
+          if(num.tryParse(input[i]) == null) {
+            setState(() {
+              displayField = 'ERROR: non-number encountered';
+            });    
+          } else {
+            val2 += input[i];
+          }
+        }
+      } else {
+        return;
+      }
+    }
+
+    print('Val1: ' + val1);
+    print('Symbol: ' + symbol);
+    print('Val2: ' + val2);
+
+    // then we process and pick our calculation to perform after
+    // verifying string is all good
+
+    /*
     if(num.tryParse(input[0]) != null && num.tryParse(input[2]) != null) {
       double val1 = double.parse(input[0]);
       double val2 = double.parse(input[2]);
@@ -74,6 +120,7 @@ class _MyAppState extends State<MyApp> {
           }
       }
     }
+    */
   }
   // This widget is the root of your application.
   @override
