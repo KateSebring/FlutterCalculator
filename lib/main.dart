@@ -1,6 +1,6 @@
+import 'package:calculator/math.dart';
 import 'package:flutter/material.dart';
 import './widgets.dart';
-import './math.dart';
 
 String displayField = "";
 
@@ -37,12 +37,17 @@ class _MyAppState extends State<MyApp> {
   }
 
   void calculateTotal(String input) {
-    Math calculations = Math();
+    MathCalculations calculations = MathCalculations();
     String val1 = "";
     String val2 = "";
     String symbol = "";
     int location = 0;
 
+    /* 
+      TODO: add another else block to check if a period has been entered
+      if so, add it to the value and set isDecimal to true
+      if isDecimal is already true, display an error
+    */
     for(int i = 0; i < input.length; i++) {
       if(num.tryParse(input[i]) != null) {
           val1 += input[i];
@@ -58,23 +63,23 @@ class _MyAppState extends State<MyApp> {
       symbol = input[location];
       location++;
     } else {
-      print('Symbol: not found.');
       return;
     }
 
     if(symbol != '+' && symbol != '-' && symbol != '*' && symbol != '/' ) {
       setState(() {
         displayField = 'ERROR: non-valid symbol entered';
-      });      
+      });
+      return;
     } else {
       if(location < input.length) {
         for(int i = location; i < input.length; i++) {
-          if(num.tryParse(input[i]) == null) {
+          if(num.tryParse(input[i]) != null) {
+             val2 += input[i];
+          } else {
             setState(() {
               displayField = 'ERROR: non-number encountered';
-            });    
-          } else {
-            val2 += input[i];
+            });
           }
         }
       } else {
@@ -82,22 +87,21 @@ class _MyAppState extends State<MyApp> {
       }
     }
 
-    print('Val1: ' + val1);
-    print('Symbol: ' + symbol);
-    print('Val2: ' + val2);
-
     switch(symbol) {
       case '+':
+      String calculatedValue = calculations.add(double.parse(val1), double.parse(val2)).toString();
         setState(() {
-          displayField = calculations.add(double.parse(val1), double.parse(val2)).toString();
+          displayField = calculatedValue.substring(0, calculatedValue.length - 2);
         });
       case '-':
+      String calculatedValue = calculations.subtract(double.parse(val1), double.parse(val2)).toString();
         setState(() {
-          displayField = calculations.subtract(double.parse(val1), double.parse(val2)).toString();
+          displayField = calculatedValue.substring(0, calculatedValue.length - 2);
         }); 
       case '*':
+        String calculatedValue = calculations.multiply(double.parse(val1), double.parse(val2)).toString();
         setState(() {
-          displayField = calculations.multiply(double.parse(val1), double.parse(val2)).toString();
+          displayField = calculatedValue.substring(0, calculatedValue.length - 2);
         });
       case '/':
         if(double.parse(val2) == 0) {
@@ -105,8 +109,9 @@ class _MyAppState extends State<MyApp> {
             displayField = "ERROR: division by zero";
           });
         } else {
+          String calculatedValue = calculations.divide(double.parse(val1), double.parse(val2)).toString();
           setState(() {
-            displayField = calculations.divide(double.parse(val1), double.parse(val2)).toString();
+            displayField = calculatedValue.substring(0, calculatedValue.length - 2);
           });
         }
     }
