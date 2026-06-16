@@ -17,7 +17,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   void updateDisplayField(String value) {
-    // allow longer fields eventually
     setState(() {
       displayField += value;
     });
@@ -87,40 +86,30 @@ class _MyAppState extends State<MyApp> {
     print('Symbol: ' + symbol);
     print('Val2: ' + val2);
 
-    // then we process and pick our calculation to perform after
-    // verifying string is all good
-
-    /*
-    if(num.tryParse(input[0]) != null && num.tryParse(input[2]) != null) {
-      double val1 = double.parse(input[0]);
-      double val2 = double.parse(input[2]);
-      // make this not display decimal point for three main functions
-      switch(symbol) {
-        case '+':
+    switch(symbol) {
+      case '+':
+        setState(() {
+          displayField = calculations.add(double.parse(val1), double.parse(val2)).toString();
+        });
+      case '-':
+        setState(() {
+          displayField = calculations.subtract(double.parse(val1), double.parse(val2)).toString();
+        }); 
+      case '*':
+        setState(() {
+          displayField = calculations.multiply(double.parse(val1), double.parse(val2)).toString();
+        });
+      case '/':
+        if(double.parse(val2) == 0) {
           setState(() {
-            displayField = calculations.add(val1, val2).toString();
+            displayField = "ERROR: division by zero";
           });
-        case '-':
+        } else {
           setState(() {
-            displayField = calculations.subtract(val1, val2).toString();
-          }); 
-        case '*':
-          setState(() {
-            displayField = calculations.multiply(val1, val2).toString();
+            displayField = calculations.divide(double.parse(val1), double.parse(val2)).toString();
           });
-        case '/':
-          if(val2 == 0) {
-            setState(() {
-              displayField = "ERROR: cannot divide by zero.";
-            });
-          } else {
-            setState(() {
-              displayField = calculations.divide(val1, val2).toString();
-            });
-          }
-      }
+        }
     }
-    */
   }
   // This widget is the root of your application.
   @override
