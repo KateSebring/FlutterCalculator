@@ -16,18 +16,29 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // a function that will add the value to the displayField
+  // if an error occured and was displayed
+  // then the displayField is first cleared before adding the value
   void updateDisplayField(String value) {
+    if(displayField.startsWith("ERROR")) {
+      setState(() {
+        displayField = "";
+      });
+    }
+
     setState(() {
       displayField += value;
     });
   }
 
+  // resets the display field
   void clearDisplayField() {
     setState(() {
       displayField = "";
     });
   }
   
+  // removes the last entered value from the display field
   void backspaceDisplayField() {
     setState(() {
       if(displayField.isNotEmpty) {
@@ -36,6 +47,9 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  // parses the numbers and symbol input into the display field
+  // then calls the corresponding function and sets display field to the total
+  // displays an error in displayField as needed
   void calculateTotal(String input) {
     MathCalculations calculations = MathCalculations();
     String val1 = "";
@@ -48,6 +62,9 @@ class _MyAppState extends State<MyApp> {
       if so, add it to the value and set isDecimal to true
       if isDecimal is already true, display an error
     */
+    // parses the string and gathers the numbers found into the first value
+    // a location value is incremented to keep track of where we are in the string
+    // once a non-number is found, breaks out of the loop
     for(int i = 0; i < input.length; i++) {
       if(num.tryParse(input[i]) != null) {
           val1 += input[i];
@@ -57,8 +74,12 @@ class _MyAppState extends State<MyApp> {
       }
     }
 
-    // we hit a non-number
-    // so we need to fetch the symbol
+    // a non-number was encountered
+    // before we try to process the symbol, we ensure that 
+    // we did not reach the end of the string
+    // if we did reach the end of the string, nothing happens
+    // otherwise, the symbol will be fetched from our current location in the string
+    // then the location index will be incremented
     if(location < input.length) {
       symbol = input[location];
       location++;
@@ -66,6 +87,13 @@ class _MyAppState extends State<MyApp> {
       return;
     }
 
+    // if the symbol entered is not a valid symbol
+    // then display an error
+    // otherwise continue parsing the string for numbers
+    // and building value 2
+    // if any non-number is encountered, display an error
+    // if we reached the end of the string already when
+    // we read the symbol, nothing happens
     if(symbol != '+' && symbol != '-' && symbol != '*' && symbol != '/' ) {
       setState(() {
         displayField = 'ERROR: non-valid symbol entered';
@@ -87,6 +115,9 @@ class _MyAppState extends State<MyApp> {
       }
     }
 
+    // call the associated function for the symbol entered by the user
+    // and input the val1 and val2 variables
+    // then set displayField to display the value
     switch(symbol) {
       case '+':
       String calculatedValue = calculations.add(double.parse(val1), double.parse(val2)).toString();
@@ -111,7 +142,11 @@ class _MyAppState extends State<MyApp> {
         } else {
           String calculatedValue = calculations.divide(double.parse(val1), double.parse(val2)).toString();
           setState(() {
-            displayField = calculatedValue.substring(0, calculatedValue.length - 2);
+            if(calculatedValue[calculatedValue.length - 1] != "0") {
+              displayField = calculatedValue;
+            } else {
+              displayField = calculatedValue.substring(0, calculatedValue.length - 2);
+            }
           });
         }
     }
