@@ -16,6 +16,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  MathCalculations calculations = MathCalculations();
   // a function that will add the value to the displayField
   // if an error occured and was displayed
   // then the displayField is first cleared before adding the value
@@ -47,11 +48,71 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  bool validateString(String input) {
+    for(int i = 0; i < input.length; i++) {
+      if(num.tryParse(input[i]) == null) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void setDisplayField(double value) {
+    setState(() {
+      displayField = value.toString();
+    });
+  }
+
+  void calculateReciprocal() {
+    if(!validateString(displayField)) {
+      setState(() {
+        displayField = "ERROR: invalid operation";
+      });
+      return;
+    }
+
+    double reciprocal = calculations.reciprocal(double.parse(displayField));
+
+    setDisplayField(reciprocal);
+  }
+
+  void calculateSquareRoot() {
+    if(!validateString(displayField)) {
+      setState(() {
+        displayField = "ERROR: invalid operation";
+      });
+      return;
+    }
+
+    double squareRoot = calculations.squareRoot(double.parse(displayField));
+
+    setDisplayField(squareRoot);
+  }
+
+  void calculateFactorial() {
+    if(!validateString(displayField)) {
+      setState(() {
+        displayField = "ERROR: invalid operation";
+      });
+      return;
+    }
+
+    if(double.parse(displayField) < 0) {
+      setState(() {
+        displayField = "ERROR: invalid operation";
+      });
+      return;
+    }
+
+    double factorial = calculations.factorial(int.parse(displayField));
+
+    setDisplayField(factorial);
+  }
+
   // parses the numbers and symbol input into the display field
   // then calls the corresponding function and sets display field to the total
   // displays an error in displayField as needed
   void calculateTotal(String input) {
-    MathCalculations calculations = MathCalculations();
     String val1 = "";
     String val2 = "";
     String symbol = "";
@@ -94,7 +155,7 @@ class _MyAppState extends State<MyApp> {
     // if any non-number is encountered, display an error
     // if we reached the end of the string already when
     // we read the symbol, nothing happens
-    if(symbol != '+' && symbol != '-' && symbol != '*' && symbol != '/' ) {
+    if(symbol != '+' && symbol != '-' && symbol != '*' && symbol != '/' && symbol != '^') {
       setState(() {
         displayField = 'ERROR: non-valid symbol entered';
       });
@@ -149,6 +210,11 @@ class _MyAppState extends State<MyApp> {
             }
           });
         }
+      case '^':
+        String calculatedValue = calculations.power(double.parse(val1), double.parse(val2)).toString();
+        setState(() {
+          displayField = calculatedValue.substring(0, calculatedValue.length - 2);
+        });
     }
   }
   // This widget is the root of your application.
@@ -369,8 +435,7 @@ class _MyAppState extends State<MyApp> {
                       child: CalcButton(
                         buttonText: '1/x', 
                         onPressed: (value) {
-                          // TODO replace this function with a calculateInverse function
-                          updateDisplayField(value);
+                          calculateReciprocal();
                         },
                       ),
                     ),
@@ -379,8 +444,7 @@ class _MyAppState extends State<MyApp> {
                       child: CalcButton(
                         buttonText: '√', 
                         onPressed: (value) {
-                          // TODO replace this function with a calculateSquareRoot function
-                          updateDisplayField(value);
+                          calculateSquareRoot();
                         },
                       ),
                     ),
@@ -389,8 +453,7 @@ class _MyAppState extends State<MyApp> {
                       child: CalcButton(
                         buttonText: 'n!', 
                         onPressed: (value) {
-                          // TODO replace this function with a calculateFactorial function
-                          updateDisplayField(value);
+                          calculateFactorial();
                         },
                       ),
                     ),
