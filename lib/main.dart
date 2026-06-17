@@ -369,6 +369,7 @@ class _MyAppState extends State<MyApp> {
                       child: CalcButton(
                         buttonText: '1/x', 
                         onPressed: (value) {
+                          // TODO replace this function with a calculateInverse function
                           updateDisplayField(value);
                         },
                       ),
@@ -378,6 +379,7 @@ class _MyAppState extends State<MyApp> {
                       child: CalcButton(
                         buttonText: '√', 
                         onPressed: (value) {
+                          // TODO replace this function with a calculateSquareRoot function
                           updateDisplayField(value);
                         },
                       ),
@@ -387,6 +389,7 @@ class _MyAppState extends State<MyApp> {
                       child: CalcButton(
                         buttonText: 'n!', 
                         onPressed: (value) {
+                          // TODO replace this function with a calculateFactorial function
                           updateDisplayField(value);
                         },
                       ),
