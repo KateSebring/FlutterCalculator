@@ -47,9 +47,19 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void setDisplayField(double value) {
+  void displayTotalInDisplayField(String calculatedValue) {
     setState(() {
-      displayField = value.toString();
+      if(calculatedValue[calculatedValue.length - 1] != "0") {
+        displayField = calculatedValue;
+      } else {
+        displayField = calculatedValue.substring(0, calculatedValue.length - 2);
+      }
+  });
+  }
+
+  void displayMessageInDisplayField(String message) {
+    setState(() {
+      displayField = message;
     });
   }
   /*END DISPLAY FIELD MODIFICATION METHODS*/
@@ -65,99 +75,63 @@ class _MyAppState extends State<MyApp> {
 
   void calculateReciprocal() {
     if(!validateString(displayField)) {
-      setState(() {
-        displayField = "ERROR: invalid operation";
-      });
+      displayMessageInDisplayField('ERROR: please enter one number');
       return;
     }
 
-    double reciprocal = calculations.reciprocal(double.parse(displayField));
+    String reciprocal = calculations.reciprocal(double.parse(displayField)).toString();
 
-    setDisplayField(reciprocal);
+    displayTotalInDisplayField(reciprocal);
   }
 
   void calculateSquareRoot() {
     if(!validateString(displayField)) {
-      setState(() {
-        displayField = "ERROR: invalid operation";
-      });
+      displayMessageInDisplayField('ERROR: please enter one number');
       return;
     }
 
-    double squareRoot = calculations.squareRoot(double.parse(displayField));
+    String squareRoot = calculations.squareRoot(double.parse(displayField)).toString();
 
-    setDisplayField(squareRoot);
+    displayTotalInDisplayField(squareRoot);
   }
 
   void calculateFactorial() {
     if(!validateString(displayField)) {
-      setState(() {
-        displayField = "ERROR: invalid operation";
-      });
+      displayMessageInDisplayField('ERROR: please enter one number');
       return;
     }
 
     if(double.parse(displayField) < 0) {
-      setState(() {
-        displayField = "ERROR: invalid operation";
-      });
+      displayMessageInDisplayField('ERROR: value must be 0 or greater');
       return;
     }
 
-    double factorial = calculations.factorial(int.parse(displayField));
+    String factorial = calculations.factorial(int.parse(displayField)).toString();
 
-    setDisplayField(factorial);
+    displayTotalInDisplayField(factorial);
   }
 
   void performSymbolCalculation(String symbol, String val1, String val2) {
     switch(symbol) {
       case '+':
-      String calculatedValue = calculations.add(double.parse(val1), double.parse(val2)).toString();
-        setState(() {
-          if(calculatedValue[calculatedValue.length - 1] != "0") {
-              displayField = calculatedValue;
-            } else {
-              displayField = calculatedValue.substring(0, calculatedValue.length - 2);
-            }
-        });
+        String calculatedValue = calculations.add(double.parse(val1), double.parse(val2)).toString();
+        displayTotalInDisplayField(calculatedValue);
       case '-':
-      String calculatedValue = calculations.subtract(double.parse(val1), double.parse(val2)).toString();
-        setState(() {
-          if(calculatedValue[calculatedValue.length - 1] != "0") {
-              displayField = calculatedValue;
-            } else {
-              displayField = calculatedValue.substring(0, calculatedValue.length - 2);
-            }
-        }); 
+        String calculatedValue = calculations.subtract(double.parse(val1), double.parse(val2)).toString();
+        displayTotalInDisplayField(calculatedValue);  
       case '*':
         String calculatedValue = calculations.multiply(double.parse(val1), double.parse(val2)).toString();
-        setState(() {
-          if(calculatedValue[calculatedValue.length - 1] != "0") {
-              displayField = calculatedValue;
-            } else {
-              displayField = calculatedValue.substring(0, calculatedValue.length - 2);
-            }
-        });
+        displayTotalInDisplayField(calculatedValue);
       case '/':
         if(double.parse(val2) == 0) {
-          setState(() {
-            displayField = "ERROR: division by zero";
-          });
+          displayMessageInDisplayField('ERROR: division by zero');
         } else {
           String calculatedValue = calculations.divide(double.parse(val1), double.parse(val2)).toString();
-          setState(() {
-            if(calculatedValue[calculatedValue.length - 1] != "0") {
-              displayField = calculatedValue;
-            } else {
-              displayField = calculatedValue.substring(0, calculatedValue.length - 2);
-            }
-          });
+          displayTotalInDisplayField(calculatedValue);
         }
       case '^':
         String calculatedValue = calculations.power(double.parse(val1), double.parse(val2)).toString();
-        setState(() {
-          displayField = calculatedValue.substring(0, calculatedValue.length - 2);
-        });
+        displayTotalInDisplayField(calculatedValue);
     }
   }
 
@@ -169,6 +143,7 @@ class _MyAppState extends State<MyApp> {
     String val2 = "";
     String symbol = "";
     int position = 0;
+    bool isDecimal = false;
 
     /* 
       TODO: add another else block to check if a period has been entered
@@ -182,6 +157,14 @@ class _MyAppState extends State<MyApp> {
       if(num.tryParse(input[i]) != null) {
           val1 += input[i];
           position++; 
+      } else if(input[i] == '.') {
+        if(!isDecimal) {
+          val1 += input[i];
+          isDecimal = true;
+        } else {
+
+          return;
+        }
       } else {
         break;
       }
