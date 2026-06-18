@@ -22,17 +22,17 @@ class _MyAppState extends State<MyApp> {
   void updateDisplayField(String value) {
     if(value == '0' && displayField == '0') {
       return;
-    }
-
-    if(displayField.startsWith('ERROR') || displayField == '0') {
+    } else if(displayField.startsWith('ERROR') || displayField == '0') {
       setState(() {
         displayField = '';
       });
     }
-
-    setState(() {
-      displayField += value;
-    });
+    
+    if (displayField.length != 25) {
+      setState(() {
+        displayField += value;
+      });
+    }
   }
 
   // resets the display field
@@ -48,10 +48,11 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         displayField = '';
       });
-      return;
-    }
-
-    if(displayField.isNotEmpty && displayField != '0') {
+    } else if(displayField.length == 1) {
+      setState(() {
+        displayField = '0';
+      });
+    } else if(displayField.isNotEmpty) {
       setState(() {
         displayField = displayField.substring(0, displayField.length - 1);
       });
@@ -69,12 +70,24 @@ class _MyAppState extends State<MyApp> {
   }
 
   void displayMessageInDisplayField(String message) {
-    setState(() {
-      displayField = message;
-    });
+    if(message.endsWith('.0')) {
+      setState(() {
+        displayField = message.substring(0, message.length - 2);
+      });
+    } else {
+      setState(() {
+        displayField = message;
+      });
+    }
+    
   }
   /*END DISPLAY FIELD MODIFICATION METHODS*/
 
+  // a helper method used by calculations that
+  // take in only one number
+  // if any non-number/decimal symbols are found
+  // will return false
+  // otheriwse returns true
   bool validateSingleNumber(String input) {
     bool isDecimal = false;
 
@@ -168,11 +181,6 @@ class _MyAppState extends State<MyApp> {
     int position = 0;
     bool isDecimal = false;
 
-    /* 
-      TODO: add another else block to check if a period has been entered
-      if so, add it to the value and set isDecimal to true
-      if isDecimal is already true, display an error
-    */
     // parses the string and gathers the numbers found into the first value
     // a position value is incremented to keep track of where we are in the string
     // once a non-number is found, breaks out of the loop
@@ -230,14 +238,15 @@ class _MyAppState extends State<MyApp> {
           val2 += input[i];
       } else if(input[i] == '.') {
         if(!isDecimal) {
-          val1 += input[i];
+          val2 += input[i];
           isDecimal = true;
         } else {
           displayMessageInDisplayField('ERROR: too many decimal points');
           return;
         }
       } else {
-        displayMessageInDisplayField('ERROR: invalid symbol encountered');
+        displayMessageInDisplayField('ERROR: too many symbols entered');
+        return;
       }
     }
 
@@ -292,8 +301,7 @@ class _MyAppState extends State<MyApp> {
                 ],
               ),
             ),
-            Expanded(
-              child: Row(
+            Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -366,9 +374,9 @@ class _MyAppState extends State<MyApp> {
                     Padding(
                       padding: EdgeInsets.all(5),
                       child: CalcButton(
-                        buttonText: 'C', 
-                        onPressed: (_) {
-                          clearDisplayField();
+                        buttonText: '.', 
+                        onPressed: (value) {
+                          updateDisplayField(value);
                         }
                       ),
                     ),
@@ -404,9 +412,9 @@ class _MyAppState extends State<MyApp> {
                     Padding(
                       padding: EdgeInsets.all(5),
                       child: CalcButton(
-                        buttonText: '=', 
-                        onPressed: (value) {
-                          calculateTotal(displayField);
+                        buttonText: 'C', 
+                        onPressed: (_) {
+                          clearDisplayField();
                         },
                       ),
                     ),
@@ -489,7 +497,19 @@ class _MyAppState extends State<MyApp> {
                   ],),
                 ],
               ),
-            ),
+              SizedBox(
+                height: 10,
+              ),
+            Column(
+                children: [
+                  CalcButton(
+                    buttonText: 'Calculate', 
+                    onPressed: (_) {
+                      calculateTotal(displayField);
+                    },
+                  ),
+                ],
+              ),
           ],
         ),
       ),
