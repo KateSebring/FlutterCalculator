@@ -17,9 +17,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   MathCalculations calculations = MathCalculations();
-  // a function that will add the value to the displayField
-  // if an error occured and was displayed
-  // then the displayField is first cleared before adding the value
+  
+  /*DISPLAY FIELD MODIFICATION METHODS*/
   void updateDisplayField(String value) {
     if(displayField.startsWith("ERROR")) {
       setState(() {
@@ -48,6 +47,13 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void setDisplayField(double value) {
+    setState(() {
+      displayField = value.toString();
+    });
+  }
+  /*END DISPLAY FIELD MODIFICATION METHODS*/
+
   bool validateString(String input) {
     for(int i = 0; i < input.length; i++) {
       if(num.tryParse(input[i]) == null) {
@@ -55,12 +61,6 @@ class _MyAppState extends State<MyApp> {
       }
     }
     return true;
-  }
-
-  void setDisplayField(double value) {
-    setState(() {
-      displayField = value.toString();
-    });
   }
 
   void calculateReciprocal() {
