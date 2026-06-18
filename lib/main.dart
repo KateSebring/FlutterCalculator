@@ -2,7 +2,7 @@ import 'package:calculator/math_functions.dart';
 import 'package:flutter/material.dart';
 import './widgets.dart';
 
-String displayField = "";
+String displayField = '0';
 
 void main() {
   runApp(const MyApp());
@@ -20,9 +20,13 @@ class _MyAppState extends State<MyApp> {
   
   /*DISPLAY FIELD MODIFICATION METHODS*/
   void updateDisplayField(String value) {
-    if(displayField.startsWith("ERROR")) {
+    if(value == '0' && displayField == '0') {
+      return;
+    }
+
+    if(displayField.startsWith('ERROR') || displayField == '0') {
       setState(() {
-        displayField = "";
+        displayField = '';
       });
     }
 
@@ -34,17 +38,24 @@ class _MyAppState extends State<MyApp> {
   // resets the display field
   void clearDisplayField() {
     setState(() {
-      displayField = "";
+      displayField = '0';
     });
   }
   
   // removes the last entered value from the display field
   void backspaceDisplayField() {
-    setState(() {
-      if(displayField.isNotEmpty) {
+    if(displayField.startsWith('ERROR')) {
+      setState(() {
+        displayField = '';
+      });
+      return;
+    }
+
+    if(displayField.isNotEmpty && displayField != '0') {
+      setState(() {
         displayField = displayField.substring(0, displayField.length - 1);
-      }
-    });
+      });
+    }
   }
 
   void displayTotalInDisplayField(String calculatedValue) {
@@ -64,9 +75,21 @@ class _MyAppState extends State<MyApp> {
   }
   /*END DISPLAY FIELD MODIFICATION METHODS*/
 
-  bool validateString(String input) {
+  bool validateSingleNumber(String input) {
+    bool isDecimal = false;
+
+    if(input[0] == '.') {
+      return false;
+    }
+
     for(int i = 0; i < input.length; i++) {
-      if(num.tryParse(input[i]) == null) {
+      if(isDecimal) {
+        return false;
+      }
+
+      if(input[i] == '.') {
+        isDecimal = true;
+      } else if(num.tryParse(input[i]) == null) {
         return false;
       }
     }
@@ -74,7 +97,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void calculateReciprocal() {
-    if(!validateString(displayField)) {
+    if(!validateSingleNumber(displayField)) {
       displayMessageInDisplayField('ERROR: please enter one number');
       return;
     }
@@ -85,7 +108,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void calculateSquareRoot() {
-    if(!validateString(displayField)) {
+    if(!validateSingleNumber(displayField)) {
       displayMessageInDisplayField('ERROR: please enter one number');
       return;
     }
@@ -96,7 +119,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void calculateFactorial() {
-    if(!validateString(displayField)) {
+    if(!validateSingleNumber(displayField)) {
       displayMessageInDisplayField('ERROR: please enter one number');
       return;
     }
@@ -156,16 +179,17 @@ class _MyAppState extends State<MyApp> {
     for(int i = 0; i < input.length; i++) {
       if(num.tryParse(input[i]) != null) {
           val1 += input[i];
-          position++; 
       } else if(input[i] == '.') {
         if(!isDecimal) {
           val1 += input[i];
           isDecimal = true;
         } else {
-
+          displayMessageInDisplayField('ERROR: too many decimal points');
           return;
         }
       } else {
+        isDecimal = false;
+        position = i;
         break;
       }
     }
@@ -197,19 +221,24 @@ class _MyAppState extends State<MyApp> {
     // set an error and exit the method
     // if end of string is reached
     // then exit the method
-    if(position < input.length) {
-      for(int i = position; i < input.length; i++) {
-        if(num.tryParse(input[i]) != null) {
-            val2 += input[i];
+    if(position >= input.length) {
+      return;
+    }
+
+    for(int i = position; i < input.length; i++) {
+      if(num.tryParse(input[i]) != null) {
+          val2 += input[i];
+      } else if(input[i] == '.') {
+        if(!isDecimal) {
+          val1 += input[i];
+          isDecimal = true;
         } else {
-          setState(() {
-            displayField = 'ERROR: non-number encountered';
-          });
+          displayMessageInDisplayField('ERROR: too many decimal points');
           return;
         }
+      } else {
+        displayMessageInDisplayField('ERROR: invalid symbol encountered');
       }
-    } else {
-      return;
     }
 
     // call the associated function for the symbol entered by the user
