@@ -20,18 +20,3 @@ class CalcButton extends StatelessWidget {
     );
   }
 }
-
-class CalcField extends StatefulWidget {
-  const CalcField({super.key});
-
-  @override
-  Widget build(BuildContext context){
-    return Placeholder();
-  }
-  
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
-  }
-}

@@ -1,4 +1,4 @@
-import 'package:calculator/math.dart';
+import 'package:calculator/math_functions.dart';
 import 'package:flutter/material.dart';
 import './widgets.dart';
 
@@ -17,9 +17,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   MathCalculations calculations = MathCalculations();
-  // a function that will add the value to the displayField
-  // if an error occured and was displayed
-  // then the displayField is first cleared before adding the value
+  
+  /*DISPLAY FIELD MODIFICATION METHODS*/
   void updateDisplayField(String value) {
     if(displayField.startsWith("ERROR")) {
       setState(() {
@@ -48,6 +47,13 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void setDisplayField(double value) {
+    setState(() {
+      displayField = value.toString();
+    });
+  }
+  /*END DISPLAY FIELD MODIFICATION METHODS*/
+
   bool validateString(String input) {
     for(int i = 0; i < input.length; i++) {
       if(num.tryParse(input[i]) == null) {
@@ -55,12 +61,6 @@ class _MyAppState extends State<MyApp> {
       }
     }
     return true;
-  }
-
-  void setDisplayField(double value) {
-    setState(() {
-      displayField = value.toString();
-    });
   }
 
   void calculateReciprocal() {
@@ -109,91 +109,34 @@ class _MyAppState extends State<MyApp> {
     setDisplayField(factorial);
   }
 
-  // parses the numbers and symbol input into the display field
-  // then calls the corresponding function and sets display field to the total
-  // displays an error in displayField as needed
-  void calculateTotal(String input) {
-    String val1 = "";
-    String val2 = "";
-    String symbol = "";
-    int location = 0;
-
-    /* 
-      TODO: add another else block to check if a period has been entered
-      if so, add it to the value and set isDecimal to true
-      if isDecimal is already true, display an error
-    */
-    // parses the string and gathers the numbers found into the first value
-    // a location value is incremented to keep track of where we are in the string
-    // once a non-number is found, breaks out of the loop
-    for(int i = 0; i < input.length; i++) {
-      if(num.tryParse(input[i]) != null) {
-          val1 += input[i];
-          location++; 
-      } else {
-        break;
-      }
-    }
-
-    // a non-number was encountered
-    // before we try to process the symbol, we ensure that 
-    // we did not reach the end of the string
-    // if we did reach the end of the string, nothing happens
-    // otherwise, the symbol will be fetched from our current location in the string
-    // then the location index will be incremented
-    if(location < input.length) {
-      symbol = input[location];
-      location++;
-    } else {
-      return;
-    }
-
-    // if the symbol entered is not a valid symbol
-    // then display an error
-    // otherwise continue parsing the string for numbers
-    // and building value 2
-    // if any non-number is encountered, display an error
-    // if we reached the end of the string already when
-    // we read the symbol, nothing happens
-    if(symbol != '+' && symbol != '-' && symbol != '*' && symbol != '/' && symbol != '^') {
-      setState(() {
-        displayField = 'ERROR: non-valid symbol entered';
-      });
-      return;
-    } else {
-      if(location < input.length) {
-        for(int i = location; i < input.length; i++) {
-          if(num.tryParse(input[i]) != null) {
-             val2 += input[i];
-          } else {
-            setState(() {
-              displayField = 'ERROR: non-number encountered';
-            });
-          }
-        }
-      } else {
-        return;
-      }
-    }
-
-    // call the associated function for the symbol entered by the user
-    // and input the val1 and val2 variables
-    // then set displayField to display the value
+  void performSymbolCalculation(String symbol, String val1, String val2) {
     switch(symbol) {
       case '+':
       String calculatedValue = calculations.add(double.parse(val1), double.parse(val2)).toString();
         setState(() {
-          displayField = calculatedValue.substring(0, calculatedValue.length - 2);
+          if(calculatedValue[calculatedValue.length - 1] != "0") {
+              displayField = calculatedValue;
+            } else {
+              displayField = calculatedValue.substring(0, calculatedValue.length - 2);
+            }
         });
       case '-':
       String calculatedValue = calculations.subtract(double.parse(val1), double.parse(val2)).toString();
         setState(() {
-          displayField = calculatedValue.substring(0, calculatedValue.length - 2);
+          if(calculatedValue[calculatedValue.length - 1] != "0") {
+              displayField = calculatedValue;
+            } else {
+              displayField = calculatedValue.substring(0, calculatedValue.length - 2);
+            }
         }); 
       case '*':
         String calculatedValue = calculations.multiply(double.parse(val1), double.parse(val2)).toString();
         setState(() {
-          displayField = calculatedValue.substring(0, calculatedValue.length - 2);
+          if(calculatedValue[calculatedValue.length - 1] != "0") {
+              displayField = calculatedValue;
+            } else {
+              displayField = calculatedValue.substring(0, calculatedValue.length - 2);
+            }
         });
       case '/':
         if(double.parse(val2) == 0) {
@@ -217,7 +160,81 @@ class _MyAppState extends State<MyApp> {
         });
     }
   }
-  // This widget is the root of your application.
+
+  // parses the numbers and symbol input into the display field
+  // then calls the corresponding function and sets display field to the total
+  // displays an error in displayField as needed
+  void calculateTotal(String input) {
+    String val1 = "";
+    String val2 = "";
+    String symbol = "";
+    int position = 0;
+
+    /* 
+      TODO: add another else block to check if a period has been entered
+      if so, add it to the value and set isDecimal to true
+      if isDecimal is already true, display an error
+    */
+    // parses the string and gathers the numbers found into the first value
+    // a position value is incremented to keep track of where we are in the string
+    // once a non-number is found, breaks out of the loop
+    for(int i = 0; i < input.length; i++) {
+      if(num.tryParse(input[i]) != null) {
+          val1 += input[i];
+          position++; 
+      } else {
+        break;
+      }
+    }
+
+    // if end of displayField is reached
+    // then exit the method
+    // otherwise set symbol equal to value
+    // and move to next position
+    if(position < input.length) {
+      symbol = input[position];
+      position++;
+    } else {
+      return;
+    }
+
+    // if symbol is not a valid symbol
+    // then set displayField to an error 
+    // and exit the method
+    if(symbol != '+' && symbol != '-' && symbol != '*' && symbol != '/' && symbol != '^') {
+      setState(() {
+        displayField = 'ERROR: non-valid symbol entered';
+      });
+      return;
+    }
+    
+    // if end of string is not reached
+    // then parse the second value
+    // if a non-number is encountered
+    // set an error and exit the method
+    // if end of string is reached
+    // then exit the method
+    if(position < input.length) {
+      for(int i = position; i < input.length; i++) {
+        if(num.tryParse(input[i]) != null) {
+            val2 += input[i];
+        } else {
+          setState(() {
+            displayField = 'ERROR: non-number encountered';
+          });
+          return;
+        }
+      }
+    } else {
+      return;
+    }
+
+    // call the associated function for the symbol entered by the user
+    // and input the val1 and val2 variables
+    // then set displayField to display the value
+    performSymbolCalculation(symbol, val1, val2);
+  }
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
