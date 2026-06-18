@@ -109,6 +109,58 @@ class _MyAppState extends State<MyApp> {
     setDisplayField(factorial);
   }
 
+  void performSymbolCalculation(String symbol, String val1, String val2) {
+    switch(symbol) {
+      case '+':
+      String calculatedValue = calculations.add(double.parse(val1), double.parse(val2)).toString();
+        setState(() {
+          if(calculatedValue[calculatedValue.length - 1] != "0") {
+              displayField = calculatedValue;
+            } else {
+              displayField = calculatedValue.substring(0, calculatedValue.length - 2);
+            }
+        });
+      case '-':
+      String calculatedValue = calculations.subtract(double.parse(val1), double.parse(val2)).toString();
+        setState(() {
+          if(calculatedValue[calculatedValue.length - 1] != "0") {
+              displayField = calculatedValue;
+            } else {
+              displayField = calculatedValue.substring(0, calculatedValue.length - 2);
+            }
+        }); 
+      case '*':
+        String calculatedValue = calculations.multiply(double.parse(val1), double.parse(val2)).toString();
+        setState(() {
+          if(calculatedValue[calculatedValue.length - 1] != "0") {
+              displayField = calculatedValue;
+            } else {
+              displayField = calculatedValue.substring(0, calculatedValue.length - 2);
+            }
+        });
+      case '/':
+        if(double.parse(val2) == 0) {
+          setState(() {
+            displayField = "ERROR: division by zero";
+          });
+        } else {
+          String calculatedValue = calculations.divide(double.parse(val1), double.parse(val2)).toString();
+          setState(() {
+            if(calculatedValue[calculatedValue.length - 1] != "0") {
+              displayField = calculatedValue;
+            } else {
+              displayField = calculatedValue.substring(0, calculatedValue.length - 2);
+            }
+          });
+        }
+      case '^':
+        String calculatedValue = calculations.power(double.parse(val1), double.parse(val2)).toString();
+        setState(() {
+          displayField = calculatedValue.substring(0, calculatedValue.length - 2);
+        });
+    }
+  }
+
   // parses the numbers and symbol input into the display field
   // then calls the corresponding function and sets display field to the total
   // displays an error in displayField as needed
@@ -179,43 +231,7 @@ class _MyAppState extends State<MyApp> {
     // call the associated function for the symbol entered by the user
     // and input the val1 and val2 variables
     // then set displayField to display the value
-    switch(symbol) {
-      case '+':
-      String calculatedValue = calculations.add(double.parse(val1), double.parse(val2)).toString();
-        setState(() {
-          displayField = calculatedValue.substring(0, calculatedValue.length - 2);
-        });
-      case '-':
-      String calculatedValue = calculations.subtract(double.parse(val1), double.parse(val2)).toString();
-        setState(() {
-          displayField = calculatedValue.substring(0, calculatedValue.length - 2);
-        }); 
-      case '*':
-        String calculatedValue = calculations.multiply(double.parse(val1), double.parse(val2)).toString();
-        setState(() {
-          displayField = calculatedValue.substring(0, calculatedValue.length - 2);
-        });
-      case '/':
-        if(double.parse(val2) == 0) {
-          setState(() {
-            displayField = "ERROR: division by zero";
-          });
-        } else {
-          String calculatedValue = calculations.divide(double.parse(val1), double.parse(val2)).toString();
-          setState(() {
-            if(calculatedValue[calculatedValue.length - 1] != "0") {
-              displayField = calculatedValue;
-            } else {
-              displayField = calculatedValue.substring(0, calculatedValue.length - 2);
-            }
-          });
-        }
-      case '^':
-        String calculatedValue = calculations.power(double.parse(val1), double.parse(val2)).toString();
-        setState(() {
-          displayField = calculatedValue.substring(0, calculatedValue.length - 2);
-        });
-    }
+    performSymbolCalculation(symbol, val1, val2);
   }
   // This widget is the root of your application.
   @override
