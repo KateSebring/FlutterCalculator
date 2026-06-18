@@ -168,7 +168,7 @@ class _MyAppState extends State<MyApp> {
     String val1 = "";
     String val2 = "";
     String symbol = "";
-    int location = 0;
+    int position = 0;
 
     /* 
       TODO: add another else block to check if a period has been entered
@@ -176,56 +176,57 @@ class _MyAppState extends State<MyApp> {
       if isDecimal is already true, display an error
     */
     // parses the string and gathers the numbers found into the first value
-    // a location value is incremented to keep track of where we are in the string
+    // a position value is incremented to keep track of where we are in the string
     // once a non-number is found, breaks out of the loop
     for(int i = 0; i < input.length; i++) {
       if(num.tryParse(input[i]) != null) {
           val1 += input[i];
-          location++; 
+          position++; 
       } else {
         break;
       }
     }
 
-    // a non-number was encountered
-    // before we try to process the symbol, we ensure that 
-    // we did not reach the end of the string
-    // if we did reach the end of the string, nothing happens
-    // otherwise, the symbol will be fetched from our current location in the string
-    // then the location index will be incremented
-    if(location < input.length) {
-      symbol = input[location];
-      location++;
+    // if end of displayField is reached
+    // then exit the method
+    // otherwise set symbol equal to value
+    // and move to next position
+    if(position < input.length) {
+      symbol = input[position];
+      position++;
     } else {
       return;
     }
 
-    // if the symbol entered is not a valid symbol
-    // then display an error
-    // otherwise continue parsing the string for numbers
-    // and building value 2
-    // if any non-number is encountered, display an error
-    // if we reached the end of the string already when
-    // we read the symbol, nothing happens
+    // if symbol is not a valid symbol
+    // then set displayField to an error 
+    // and exit the method
     if(symbol != '+' && symbol != '-' && symbol != '*' && symbol != '/' && symbol != '^') {
       setState(() {
         displayField = 'ERROR: non-valid symbol entered';
       });
       return;
-    } else {
-      if(location < input.length) {
-        for(int i = location; i < input.length; i++) {
-          if(num.tryParse(input[i]) != null) {
-             val2 += input[i];
-          } else {
-            setState(() {
-              displayField = 'ERROR: non-number encountered';
-            });
-          }
+    }
+    
+    // if end of string is not reached
+    // then parse the second value
+    // if a non-number is encountered
+    // set an error and exit the method
+    // if end of string is reached
+    // then exit the method
+    if(position < input.length) {
+      for(int i = position; i < input.length; i++) {
+        if(num.tryParse(input[i]) != null) {
+            val2 += input[i];
+        } else {
+          setState(() {
+            displayField = 'ERROR: non-number encountered';
+          });
+          return;
         }
-      } else {
-        return;
       }
+    } else {
+      return;
     }
 
     // call the associated function for the symbol entered by the user
@@ -233,7 +234,7 @@ class _MyAppState extends State<MyApp> {
     // then set displayField to display the value
     performSymbolCalculation(symbol, val1, val2);
   }
-  // This widget is the root of your application.
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
