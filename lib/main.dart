@@ -22,6 +22,11 @@ class _MyAppState extends State<MyApp> {
   void updateDisplayField(String value) {
     if(value == '0' && displayField == '0') {
       return;
+    } else if (value == '.' && displayField == '0') {
+      setState(() {
+        displayField += value;
+      });
+      return;
     } else if(displayField.startsWith('ERROR') || displayField == '0') {
       setState(() {
         displayField = '';
@@ -187,17 +192,18 @@ class _MyAppState extends State<MyApp> {
     for(int i = 0; i < input.length; i++) {
       if(num.tryParse(input[i]) != null) {
           val1 += input[i];
+          position++;
       } else if(input[i] == '.') {
         if(!isDecimal) {
           val1 += input[i];
           isDecimal = true;
+          position++;
         } else {
           displayMessageInDisplayField('ERROR: too many decimal points');
           return;
         }
       } else {
         isDecimal = false;
-        position = i;
         break;
       }
     }
@@ -206,12 +212,12 @@ class _MyAppState extends State<MyApp> {
     // then exit the method
     // otherwise set symbol equal to value
     // and move to next position
-    if(position < input.length) {
-      symbol = input[position];
-      position++;
-    } else {
+    if(position >= input.length) {
       return;
     }
+
+    symbol = input[position];
+    position++;
 
     // if symbol is not a valid symbol
     // then set displayField to an error 
